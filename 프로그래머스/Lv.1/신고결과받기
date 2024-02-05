@@ -1,0 +1,31 @@
+function solution(id_list, report, k) {
+  //각 유저의 신고 횟수와 신고당한 유저목록을 초기화하고
+  // 신고자와 피신고자를 구분해서 필터하면 될거같았다.
+    
+  // 각 유저의 신고 횟수와 신고당한 유저 목록 초기화
+  const userReports = id_list.reduce((result, currentId) => {
+    result[currentId] = [0, []];
+    return result;
+  }, {});
+
+  // 중복된 신고 제거
+  const uniqueReports = Array.from(new Set(report));
+  for (let i = 0; i < uniqueReports.length; i++) {
+    // 신고자와 피신고자를 구분하여 목록에 추가
+    const [REPORT_ID, ID] = uniqueReports[i].split(' ');
+    userReports[REPORT_ID][1].push(ID);
+    userReports[ID][0]++; // 피신고자의 신고 횟수 증가
+  }
+
+  // k번 이상 신고된 유저 목록
+  const bannedUsers = id_list.filter((id) => userReports[id][0] >= k);
+
+  // 각 유저별로 신고당한 횟수 계산
+  var answer = id_list.map((id) => {
+    return userReports[id][1].filter((reportedId) => {
+      return bannedUsers.includes(reportedId);
+    }).length;
+  });
+
+  return answer;
+}
