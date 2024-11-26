@@ -1,20 +1,23 @@
 function solution(ingredient) {
-  var answer = 0;
-    // 주어진 재료만큼(ingredient) for문을 돌리면 될것 같다
-    // 주어진 재료를 push 차곡차곡 쌓으면서 조리 순서가 맞는지 비교하면 될것같다
-    // 배열로 했을경우 시간 초과가 되므로 join을 썼다
-     const targetBurger = '1231'; // 햄버거 조리 순서를 문자열로 표현
-  const burgerStack = []; // 현재 쌓인 재료 저장스택
+    let stack = [];
+    let count = 0;
 
-  for (let i = 0; i < ingredient.length; i++) {
-    const currentIngredient = ingredient[i];
-    burgerStack.push(currentIngredient);
+    // 정해진 햄버거 순서
+    const burger = [1, 2, 3, 1];
 
-    if (burgerStack.slice(-4).join('') === targetBurger) {
-      burgerStack.splice(-4);
-      answer++;
+    for (let item of ingredient) {
+        stack.push(item); // 재료를 스택에 추가
+
+        // 스택의 마지막 4개가 [1, 2, 3, 1]인지 확인
+        if (
+            stack.length >= 4 &&
+            stack.slice(-4).join('') === burger.join('')
+        ) {
+            // 햄버거가 만들어졌으면 스택에서 제거
+            stack.splice(-4, 4);
+            count++; // 햄버거 개수 증가
+        }
     }
-  }
 
-  return answer;
+    return count;
 }
